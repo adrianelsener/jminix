@@ -1,74 +1,77 @@
-/*
-	Copyright (c) 2004-2009, The Dojo Foundation All Rights Reserved.
-	Available via Academic Free License >= 2.1 OR the modified BSD license.
-	see: http://dojotoolkit.org/license for details
-*/
-
-
-if(!dojo._hasResource["dijit.tree.ForestStoreModel"]){
-dojo._hasResource["dijit.tree.ForestStoreModel"]=true;
-dojo.provide("dijit.tree.ForestStoreModel");
-dojo.require("dijit.tree.TreeStoreModel");
-dojo.declare("dijit.tree.ForestStoreModel",dijit.tree.TreeStoreModel,{rootId:"$root$",rootLabel:"ROOT",query:null,constructor:function(_1){
-this.root={store:this,root:true,id:_1.rootId,label:_1.rootLabel,children:_1.rootChildren};
-},mayHaveChildren:function(_2){
-return _2===this.root||this.inherited(arguments);
-},getChildren:function(_3,_4,_5){
-if(_3===this.root){
+//>>built
+define("dijit/tree/ForestStoreModel",["dojo/_base/array","dojo/_base/declare","dojo/_base/kernel","dojo/_base/lang","./TreeStoreModel"],function(_1,_2,_3,_4,_5){
+return _2("dijit.tree.ForestStoreModel",_5,{rootId:"$root$",rootLabel:"ROOT",query:null,constructor:function(_6){
+this.root={store:this,root:true,id:_6.rootId,label:_6.rootLabel,children:_6.rootChildren};
+},mayHaveChildren:function(_7){
+return _7===this.root||this.inherited(arguments);
+},getChildren:function(_8,_9,_a){
+if(_8===this.root){
 if(this.root.children){
-_4(this.root.children);
+_9(this.root.children);
 }else{
-this.store.fetch({query:this.query,onComplete:dojo.hitch(this,function(_6){
-this.root.children=_6;
-_4(_6);
-}),onError:_5});
+this.store.fetch({query:this.query,onComplete:_4.hitch(this,function(_b){
+this.root.children=_b;
+_9(_b);
+}),onError:_a});
 }
 }else{
 this.inherited(arguments);
 }
-},getIdentity:function(_7){
-return (_7===this.root)?this.root.id:this.inherited(arguments);
-},getLabel:function(_8){
-return (_8===this.root)?this.root.label:this.inherited(arguments);
-},newItem:function(_9,_a){
-if(_a===this.root){
-this.onNewRootItem(_9);
-return this.store.newItem(_9);
+},isItem:function(_c){
+return (_c===this.root)?true:this.inherited(arguments);
+},fetchItemByIdentity:function(_d){
+if(_d.identity==this.root.id){
+var _e=_d.scope||_3.global;
+if(_d.onItem){
+_d.onItem.call(_e,this.root);
+}
+}else{
+this.inherited(arguments);
+}
+},getIdentity:function(_f){
+return (_f===this.root)?this.root.id:this.inherited(arguments);
+},getLabel:function(_10){
+return (_10===this.root)?this.root.label:this.inherited(arguments);
+},newItem:function(_11,_12,_13){
+if(_12===this.root){
+this.onNewRootItem(_11);
+return this.store.newItem(_11);
 }else{
 return this.inherited(arguments);
 }
-},onNewRootItem:function(_b){
-},pasteItem:function(_c,_d,_e,_f,_10){
-if(_d===this.root){
-if(!_f){
-this.onLeaveRoot(_c);
+},onNewRootItem:function(){
+},pasteItem:function(_14,_15,_16,_17,_18){
+if(_15===this.root){
+if(!_17){
+this.onLeaveRoot(_14);
 }
 }
-dijit.tree.TreeStoreModel.prototype.pasteItem.call(this,_c,_d===this.root?null:_d,_e===this.root?null:_e,_f,_10);
-if(_e===this.root){
-this.onAddToRoot(_c);
+this.inherited(arguments,[_14,_15===this.root?null:_15,_16===this.root?null:_16,_17,_18]);
+if(_16===this.root){
+this.onAddToRoot(_14);
 }
-},onAddToRoot:function(_11){
-
-},onLeaveRoot:function(_12){
-
+},onAddToRoot:function(_19){
+},onLeaveRoot:function(_1a){
 },_requeryTop:function(){
-var _13=this.root.children||[];
-this.store.fetch({query:this.query,onComplete:dojo.hitch(this,function(_14){
-this.root.children=_14;
-if(_13.length!=_14.length||dojo.some(_13,function(_15,idx){
-return _14[idx]!=_15;
+var _1b=this.root.children||[];
+this.store.fetch({query:this.query,onComplete:_4.hitch(this,function(_1c){
+this.root.children=_1c;
+if(_1b.length!=_1c.length||_1.some(_1b,function(_1d,idx){
+return _1c[idx]!=_1d;
 })){
-this.onChildrenChange(this.root,_14);
+this.onChildrenChange(this.root,_1c);
 }
 })});
-},_onNewItem:function(_17,_18){
+},onNewItem:function(_1e,_1f){
 this._requeryTop();
 this.inherited(arguments);
-},_onDeleteItem:function(_19){
-if(dojo.indexOf(this.root.children,_19)!=-1){
+},onDeleteItem:function(_20){
+if(_1.indexOf(this.root.children,_20)!=-1){
 this._requeryTop();
 }
+this.inherited(arguments);
+},onSetItem:function(_21,_22,_23,_24){
+this._requeryTop();
 this.inherited(arguments);
 }});
-}
+});

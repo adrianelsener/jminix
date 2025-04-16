@@ -1,14 +1,14 @@
 /*
-	Copyright (c) 2004-2009, The Dojo Foundation All Rights Reserved.
+	Copyright (c) 2004-2016, The JS Foundation All Rights Reserved.
 	Available via Academic Free License >= 2.1 OR the modified BSD license.
 	see: http://dojotoolkit.org/license for details
 */
 
-
-if(!dojo._hasResource["dojo.data.util.sorter"]){
-dojo._hasResource["dojo.data.util.sorter"]=true;
-dojo.provide("dojo.data.util.sorter");
-dojo.data.util.sorter.basicComparator=function(a,b){
+//>>built
+define("dojo/data/util/sorter",["../../_base/lang"],function(_1){
+var _2={};
+_1.setObject("dojo.data.util.sorter",_2);
+_2.basicComparator=function(a,b){
 var r=-1;
 if(a===null){
 a=undefined;
@@ -25,35 +25,37 @@ r=1;
 }
 return r;
 };
-dojo.data.util.sorter.createSortFunction=function(_4,_5){
-var _6=[];
-function _7(_8,_9){
+_2.createSortFunction=function(_3,_4){
+var _5=[];
+function _6(_7,_8,_9,s){
 return function(_a,_b){
-var a=_5.getValue(_a,_8);
-var b=_5.getValue(_b,_8);
-var _e=null;
-if(_5.comparatorMap){
-if(typeof _8!=="string"){
-_8=_5.getIdentity(_8);
-}
-_e=_5.comparatorMap[_8]||dojo.data.util.sorter.basicComparator;
-}
-_e=_e||dojo.data.util.sorter.basicComparator;
-return _9*_e(a,b);
+var a=s.getValue(_a,_7);
+var b=s.getValue(_b,_7);
+return _8*_9(a,b);
 };
 };
-var _f;
-for(var i=0;i<_4.length;i++){
-_f=_4[i];
-if(_f.attribute){
-var _11=(_f.descending)?-1:1;
-_6.push(_7(_f.attribute,_11));
+var _c;
+var _d=_4.comparatorMap;
+var bc=_2.basicComparator;
+for(var i=0;i<_3.length;i++){
+_c=_3[i];
+var _e=_c.attribute;
+if(_e){
+var _f=(_c.descending)?-1:1;
+var _10=bc;
+if(_d){
+if(typeof _e!=="string"&&("toString" in _e)){
+_e=_e.toString();
+}
+_10=_d[_e]||bc;
+}
+_5.push(_6(_e,_f,_10,_4));
 }
 }
-return function(_12,_13){
+return function(_11,_12){
 var i=0;
-while(i<_6.length){
-var ret=_6[i++](_12,_13);
+while(i<_5.length){
+var ret=_5[i++](_11,_12);
 if(ret!==0){
 return ret;
 }
@@ -61,4 +63,5 @@ return ret;
 return 0;
 };
 };
-}
+return _2;
+});
